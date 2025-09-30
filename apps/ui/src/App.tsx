@@ -1,8 +1,8 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { Home, loader as HomeLoader } from './pages/home';
-import { DataRoom, loader as DataRoomLoader } from './pages/data-rooms/id';
-import { DataRooms, loader as DataRoomsLoader } from './pages/data-rooms';
+import { Drive, loader as DriveLoader } from './pages/drives/id';
+import { Drives, loader as DrivesLoader } from './pages/drives';
 import { ErrorPage } from './pages/error-page';
 import { RootLayout } from './layouts/root-layout';
 import secretariumHandler from './utils/secretarium-handler';
@@ -31,9 +31,9 @@ const router = createBrowserRouter([
                 loader: HomeLoader
             },
             {
-                path: 'data-rooms/:dataRoomId',
-                element: <DataRoom />,
-                loader: DataRoomLoader
+                path: 'drives/:driveId',
+                element: <Drive />,
+                loader: DriveLoader
             }
         ]
     },
@@ -74,14 +74,14 @@ const router = createBrowserRouter([
                 loader: AdminLoader
             },
             {
-                path: 'data-rooms',
-                element: <DataRooms />,
-                loader: DataRoomsLoader
+                path: 'drives',
+                element: <Drives />,
+                loader: DrivesLoader
             },
             {
-                path: 'data-rooms/:dataRoomId',
-                element: <DataRoom />,
-                loader: DataRoomLoader
+                path: 'drives/:driveId',
+                element: <Drive />,
+                loader: DriveLoader
             },
             {
                 path: 'users',

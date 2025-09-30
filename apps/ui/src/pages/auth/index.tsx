@@ -32,10 +32,10 @@ export const Auth = () => {
     return (
         <>
             <Helmet>
-                <title>Welcome | Secure Data Rooms</title>
+                <title>Welcome | Secure Drives</title>
             </Helmet>
             <div className="flex flex-col items-center gap-4">
-                <h1 className="text-2xl font-semibold">Secure Data Rooms</h1>
+                <h1 className="text-2xl font-semibold">Secure Drives</h1>
                 {keyPairs.length > 0 ? (
                     <div className="flex w-full flex-col items-center gap-4">
                         <p className="text-center italic">Select a key to sign in.</p>

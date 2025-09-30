@@ -2,11 +2,11 @@ import secretariumHandler from './secretarium-handler';
 import {
     TransactionResult,
     TokenIdentityResult,
-    ListDataRoomsResult,
-    DataRoomContentResult,
+    ListDrivesResult,
+    DriveContentResult,
     GetFileUploadTokenInput,
     GetFileUploadTokenResult,
-    UpdateDataRoomInput,
+    UpdateDriveInput,
     UserRequestInput,
     ApproveUserRequestInput,
     SetIdentitiesInput,
@@ -178,14 +178,14 @@ export const setTokenIdentity = async (token?: string): Promise<TransactionResul
                 })
         );
 
-export const createDataRoom = async (): Promise<TransactionResult> =>
+export const createDrive = async (): Promise<TransactionResult> =>
     waitForConnection()
         .then(() =>
             secretariumHandler.request(
                 klaveContract,
-                'createDataRoom',
-                { dataRoomId: '' },
-                `createDataRoom-${Math.random()}`
+                'createDrive',
+                { driveId: '' },
+                `createDrive-${Math.random()}`
             )
         )
         .then(
@@ -201,10 +201,10 @@ export const createDataRoom = async (): Promise<TransactionResult> =>
                 })
         );
 
-export const updateDataRoom = async (input: UpdateDataRoomInput): Promise<TransactionResult> =>
+export const updateDrive = async (input: UpdateDriveInput): Promise<TransactionResult> =>
     waitForConnection()
         .then(() =>
-            secretariumHandler.request(klaveContract, 'updateDataRoom', input, `updateDataRoom-${Math.random()}`)
+            secretariumHandler.request(klaveContract, 'updateDrive', input, `updateDrive-${Math.random()}`)
         )
         .then(
             (tx) =>
@@ -260,9 +260,9 @@ export const getFileUploadToken = async (
                 })
         );
 
-export const listDataRooms = async (): Promise<ListDataRoomsResult> =>
+export const listDrives = async (): Promise<ListDrivesResult> =>
     waitForConnection()
-        .then(() => secretariumHandler.request(klaveContract, 'listDataRooms', {}, `listDataRooms-${Math.random()}`))
+        .then(() => secretariumHandler.request(klaveContract, 'listDrives', {}, `listDrives-${Math.random()}`))
         .then(
             (tx) =>
                 new Promise((resolve, reject) => {
@@ -276,14 +276,14 @@ export const listDataRooms = async (): Promise<ListDataRoomsResult> =>
                 })
         );
 
-export const getDataRoomContent = async (dataRoomId: string): Promise<DataRoomContentResult> =>
+export const getDriveContent = async (driveId: string): Promise<DriveContentResult> =>
     waitForConnection()
         .then(() =>
             secretariumHandler.request(
                 klaveContract,
-                'getDataRoomContent',
-                { dataRoomId },
-                `getDataRoomContent-${Math.random()}`
+                'getDriveContent',
+                { driveId },
+                `getDriveContent-${Math.random()}`
             )
         )
         .then(

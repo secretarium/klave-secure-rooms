@@ -41,9 +41,9 @@ export const SignIn = () => {
     return (
         <>
             <Helmet>
-                <title>Welcome | Secure Data Rooms</title>
+                <title>Welcome | Secure Drives</title>
             </Helmet>
-            <h1 className="p-4 text-2xl font-semibold">Secure Data Rooms</h1>
+            <h1 className="p-4 text-2xl font-semibold">Secure Drives</h1>
             <Form {...form}>
                 <ReactRouterForm onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <FormField

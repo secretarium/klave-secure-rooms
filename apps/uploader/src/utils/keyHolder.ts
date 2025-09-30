@@ -6,9 +6,9 @@ import { ClearKeyPair, Key, SCP, Utils } from '@secretarium/connector';
 const keyFolder = process.env.NX_APP_KEY_FOLDER ?? 'keys';
 const idKeyName = process.env.IKEY ?? 'i.key.pem';
 const signKeyName = process.env.SKEY ?? 's.key.pem';
-const roomKeyName = process.env.RKEY ?? 'r.key.pem';
-const deploymentId = process.env.DID ?? process.env.NX_APP_KLAVE_CONTRACT ?? 'demo-room';
-const secretariumEndpoint = process.env.NX_APP_SECRETARIUM_GATEWAYS?.split('#')?.[2] ?? 'wss://klave-prod.secretarium.org';
+const driveKeyName = process.env.RKEY ?? 'r.key.pem';
+const deploymentId = process.env.DID ?? process.env.NX_APP_KLAVE_CONTRACT ?? 'master--g.f457c26c.drive.IntegrationTests.klave.network';
+const secretariumEndpoint = process.env.NX_APP_SECRETARIUM_GATEWAYS?.split('#')?.[2] ?? 'wss://klave-dev.secretarium.org';
 
 const klave = new SCP({
     // logger: console
@@ -17,18 +17,20 @@ const klave = new SCP({
 export class KeyHolder {
     static idKey?: Key;
     static signKey?: CryptoKey;
-    static roomKey?: CryptoKey;
+    static driveKey?: CryptoKey;
     static async loadServerIdentity() {
         const keysPath = path.resolve(path.join(__dirname, keyFolder));
-        fs.mkdirSync(keysPath, { recursive: true });
+        console.info('Keys path:', keysPath);
         const idKeyPath = path.resolve(keysPath, idKeyName);
         if (!fs.existsSync(idKeyPath)) {
+            fs.mkdirSync(keysPath, { recursive: true });
             console.info('Generating Klave identity...');
             KeyHolder.idKey = await Key.createKey();
             await fs.writeFileSync(idKeyPath, JSON.stringify(await KeyHolder.idKey.exportKey()));
         } else {
-            console.info('Loading Klave indentity...');
+            console.info('Loading Klave identity...');
             const idKeyContent = fs.readFileSync(idKeyPath);
+            console.info('Id key content:', idKeyContent.toString());
             const idKey = JSON.parse(idKeyContent.toString()) as ClearKeyPair;
             KeyHolder.idKey = await Key.importKey(idKey);
         }
@@ -36,7 +38,7 @@ export class KeyHolder {
         klave.onError((e) => {
             console.error(e);
         });
-        
+
         await klave.connect(secretariumEndpoint, KeyHolder.idKey);
 
         await new Promise<void>((gresolve, greject) => {
@@ -53,7 +55,7 @@ export class KeyHolder {
                             return resolve(result.result);
                         if (result.message === 'User not found'){
                             const txcu = klave.newTx(deploymentId, 'createUserRequest', undefined, {
-                                dataRoomId: 'super',
+                                driveId: 'super',
                                 role: 'admin'
                             });
                             txcu.onResult(() => {
@@ -75,9 +77,9 @@ export class KeyHolder {
                     tx.send();
                 });
                 if (Array.isArray(userContent.roles)) {
-                    const room = userContent.roles[0];
-                    if (room) {
-                        if (room.role === 'admin') {
+                    const drive = userContent.roles[0];
+                    if (drive) {
+                        if (drive.role === 'admin') {
                             return gresolve()
                         }
                         else
@@ -105,10 +107,11 @@ export class KeyHolder {
                     reject();
                 });
                 txr.send();
-            }); 
+            });
             const txe = klave.newTx(deploymentId, 'exportStorageServerPrivateKey', undefined, { format: 'pkcs8' });
             const newSignKeyB64: string = await new Promise((resolve, reject) => {
                 txe.onResult((result) => {
+                    console.info('Key export result:', result);
                     if (result.success) return resolve(result.message);
                     reject();
                 });
@@ -129,40 +132,41 @@ export class KeyHolder {
                 namedCurve: 'P-256',
                 name: 'ECDSA'
             },
-            false,
+            true,
             ['sign']
         );
 
-        const roomKeyPath = path.resolve(keysPath, roomKeyName);
-        if (!fs.existsSync(roomKeyPath)) {
-            console.info('Obtaining the room key...');
+        const driveKeyPath = path.resolve(keysPath, driveKeyName);
+        if (!fs.existsSync(driveKeyPath)) {
+            console.info('Obtaining the drive key...');
             // throw new Error('The signing key must be a file');
             const tx = klave.newTx(deploymentId, 'getPublicKeys', undefined, {});
-            const newRoomKeyPEM: string = await new Promise((resolve, reject) => {
+            const newDriveKeyPEM: string = await new Promise((resolve, reject) => {
                 tx.onResult((result) => {
                     if (result.result) return resolve(result.result.klaveServerPublicKey);
                     reject();
                 });
                 tx.onError((error) => {
-                    console.error('newRoomKeyPEM error', error)
+                    console.error('newDriveKeyPEM error', error)
                     reject();
                 });
                 tx.send();
             });
 
-            const newRoomKeyB64 = Array.from(newRoomKeyPEM.toString().matchAll(/KEY-----\s*([\S]*?)\s*-----/mg))[0][1];
-            const newRoomKeyContent = Utils.fromBase64(newRoomKeyB64);
-            fs.writeFileSync(roomKeyPath, newRoomKeyContent);
+            const newDriveKeyB64 = Array.from(newDriveKeyPEM.toString().matchAll(/KEY-----\s*([\S]*?)\s*-----/mg))[0][1];
+            console.info('New drive key (base64):', newDriveKeyB64);
+            const newDriveKeyContent = Utils.fromBase64(newDriveKeyB64);
+            fs.writeFileSync(driveKeyPath, newDriveKeyContent);
         }
-        const roomKeyContent = fs.readFileSync(roomKeyPath);
-        KeyHolder.roomKey = await subtle.importKey(
+        const driveKeyContent = fs.readFileSync(driveKeyPath);
+        KeyHolder.driveKey = await subtle.importKey(
             'spki',
-            roomKeyContent, 
+            driveKeyContent,
             {
                 namedCurve: 'P-256',
                 name: 'ECDSA'
             },
-            false,
+            true,
             ['verify']
         );
 

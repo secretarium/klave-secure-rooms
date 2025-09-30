@@ -9,7 +9,7 @@ export const SideNav = () => {
         <div className="flex h-full flex-col gap-2 bg-slate-100 px-2 py-4">
             <div className="px-2 pb-8">
                 <NavLink to="/admin" className="text-xl font-semibold">
-                    Data Rooms
+                    Drives
                 </NavLink>
             </div>
             <NavLink
@@ -39,7 +39,7 @@ export const SideNav = () => {
                 Users
             </NavLink>
             <NavLink
-                to="/admin/data-rooms"
+                to="/admin/drives"
                 className={({ isActive }) =>
                     `flex items-center gap-4 rounded-lg p-2 text-xl ${
                         isActive
@@ -49,7 +49,7 @@ export const SideNav = () => {
                 }
             >
                 <FolderKey />
-                Rooms
+                Drives
             </NavLink>
             {/* <NavLink
                 to="/admin/test"

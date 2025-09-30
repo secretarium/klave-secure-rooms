@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Button, Card, CardContent } from '@klave-secure-rooms/ui-kit/ui';
 import { prepareFile } from '../utils/fileTools';
-import { getFileUploadToken, updateDataRoom } from '../utils/api';
+import { getFileUploadToken, updateDrive } from '../utils/api';
 import { urlToId } from '../utils/helpers';
 import { useParams } from 'react-router-dom';
 import { Utils } from '@secretarium/connector';
@@ -19,7 +19,7 @@ const workPromises: Array<Promise<any>> = [];
 // Create the Dropzone component receiving props
 export function Dropzone({ onChange, onCompleted, className, fileExtension, ...props }: DropzoneProps) {
     // Initialize state variables using the useState hook
-    const { dataRoomId } = useParams<{ dataRoomId: string }>();
+    const { driveId } = useParams<{ driveId: string }>();
     const fileInputRef = useRef<HTMLInputElement | null>(null); // Reference to file input element
     const [fileInfo, setFileInfo] = useState<string | null>(null); // Information about the uploaded file
     const [error, setError] = useState<string | null>(null); // Error message state
@@ -60,9 +60,12 @@ export function Dropzone({ onChange, onCompleted, className, fileExtension, ...p
                     return Promise.reject('Error preparing file for upload');
 
                 const uploadToken = await getFileUploadToken({
-                    dataRoomId: urlToId(dataRoomId ?? ''),
+                    driveId: urlToId(driveId ?? ''),
                     digestB64: digest,
                 })
+
+                console.info('Upload digest sent', digest);
+                console.info('Upload uploadToken received', uploadToken.result.tokenB64);
 
                 const data = new FormData();
                 data.append('token', uploadToken.result.tokenB64)
@@ -73,9 +76,9 @@ export function Dropzone({ onChange, onCompleted, className, fileExtension, ...p
                     body: data,
                 })
                 const response = await rawResponse.json();
-                
-                await updateDataRoom({
-                    dataRoomId: urlToId(dataRoomId ?? ''),
+
+                await updateDrive({
+                    driveId: urlToId(driveId ?? ''),
                     operation: 'addFile',
                     file: {
                         digestB64: digest,

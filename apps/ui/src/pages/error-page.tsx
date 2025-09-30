@@ -7,7 +7,7 @@ export const ErrorPage = () => {
     return (
         <>
             <Helmet>
-                <title>Error | Secure Data Rooms</title>
+                <title>Error | Secure Drives</title>
             </Helmet>
             <div className="flex h-screen flex-col items-center justify-center gap-8">
                 <h1 className="text-4xl font-bold">Oops!</h1>

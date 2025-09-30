@@ -11,7 +11,7 @@ export const Header = () => {
             <div className="flex justify-between px-12 py-4">
                 <Link to="/" className="flex items-center gap-2 transition-colors hover:text-slate-500">
                     <FileLock2 />
-                    <span className="text-xl font-semibold">Secure Data Rooms</span>
+                    <span className="text-xl font-semibold">Secure Drives</span>
                 </Link>
                 <Button
                     onClick={() => secretariumHandler.disconnect().then(() => navigate('/auth'))}

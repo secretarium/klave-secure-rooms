@@ -63,7 +63,7 @@ const printClusterInfo = (): void => {
         });
     });
 
-    console.info('Klave Data Rooms App now using the following cluster configuration:');
+    console.info('Klave Drive App now using the following cluster configuration:');
     console.table(printableConfig);
 };
 
@@ -86,7 +86,7 @@ const secretariumHandler = {
                 if (config.SECRETARIUM_GATEWAYS) clusterConfigBase = config.SECRETARIUM_GATEWAYS;
                 if (config.DK_SERVICES) handlerStore.fileService = config.DK_SERVICES;
                 processClusterConfig(clusterConfigBase);
-                console.info('Klave Data Rooms App now using config.json overrides');
+                console.info('Klave Drive App now using config.json overrides');
             })
             .catch(() => {
                 processClusterConfig(clusterConfigBase);
@@ -157,7 +157,7 @@ const secretariumHandler = {
             currentGateway = nextGateway;
             const endpoint = cluster[1].gateways?.[nextGateway]?.endpoint;
             if (cluster && endpoint && handlerStore.currentKey) {
-                console.info('Klave Data Rooms App now using the following gateway:', endpoint);
+                console.info('Klave Drive App now using the following gateway:', endpoint);
                 handlerStore.currentConnection
                     .reset()
                     .connect(endpoint, handlerStore.currentKey)

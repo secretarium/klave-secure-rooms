@@ -37,18 +37,24 @@ export async function app(fastify: FastifyInstance) {
         if (!tokenB64)
             return res.status(400).send({ error: 'Token is missing' });
 
+        console.info('Received upload token', tokenB64);
         const token = Utils.fromBase64(tokenB64);
         const tokenContent = token.subarray(0, 32 + 8);
         const tokenContentB64 = Utils.toBase64(tokenContent, false);
         const expectedDigest = tokenContent.subarray(0, 32);
         const signature = token.subarray(32 + 8);
 
-        if (!KeyHolder.roomKey)
-            return res.status(500).send({ error: 'The data room key is missing' });
+        if (!KeyHolder.driveKey)
+            return res.status(500).send({ error: 'The data drive key is missing' });
         if (!KeyHolder.signKey)
             return res.status(500).send({ error: 'The signing key is missing' });
 
-        const isValid = await crypto.subtle.verify({ name: 'ECDSA', hash: 'SHA-256' }, KeyHolder.roomKey, signature, Buffer.from(tokenContentB64));
+        console.info('Verifying signature for token', tokenContentB64);
+        const public_key_buf = await crypto.subtle.exportKey('spki', KeyHolder.driveKey);
+        const public_key = Utils.toBase64(new Uint8Array(public_key_buf), false);
+        console.info('Drive public key: ', public_key);
+        console.info('Signature: ', Utils.toBase64(signature, false));
+        const isValid = await crypto.subtle.verify({ name: 'ECDSA', hash: 'SHA-256' }, KeyHolder.driveKey, signature, Buffer.from(tokenContentB64));
 
         if (!isValid)
             return res.status(400).send({ error: 'The signature could not be verified' });

@@ -77,7 +77,7 @@ export const loadFile = async (file: FileRecord, withContent?: boolean): Promise
             'Authorization': `klavedr=${file.token}`
         }
     }).then(async result => {
-        
+
         const isJson = result.headers.get('content-type')?.toLocaleLowerCase().includes('application/json');
         if (isJson) {
             const response = await result.json();

@@ -5,7 +5,7 @@ import {
     getFileUploadToken,
     verify,
     sign,
-    updateDataRoom,
+    updateDrive,
     exportStorageServerPrivateKey
 } from '../../utils/api';
 import { arrayBufferToBase64, base64ToArrayBuffer, subtleHash } from '../../utils/helpers';
@@ -20,10 +20,10 @@ const createFileDigest = async () => {
     return digestB64;
 };
 
-const getUploadToken = async (dataRoomId: string, digestB64: string, backendPublicKey: string) => {
+const getUploadToken = async (driveId: string, digestB64: string, backendPublicKey: string) => {
     //WebServer asks signature from Backend
     const getFileUploadTokenInput = {
-        dataRoomId: dataRoomId,
+        driveId: driveId,
         digestB64: digestB64
     };
 
@@ -46,7 +46,7 @@ const getUploadToken = async (dataRoomId: string, digestB64: string, backendPubl
     return true;
 };
 
-const updateDR = async (dataRoomId: string, digestB64: string, webSvrPrivKey: any) => {
+const updateDR = async (driveId: string, digestB64: string, webSvrPrivKey: any) => {
     //Token is a b64 concatenation between the file digest, the time and the signature of the couple {file digest, time}
     const time = new Date().getTime();
     const timeBuffer = new ArrayBuffer(8);
@@ -70,7 +70,7 @@ const updateDR = async (dataRoomId: string, digestB64: string, webSvrPrivKey: an
     const tokenB64 = arrayBufferToBase64(token);
 
     const updateDRInput = {
-        dataRoomId: dataRoomId,
+        driveId: driveId,
         operation: 'addFile',
         file: {
             name: 'hello_there.txt',
@@ -81,7 +81,7 @@ const updateDR = async (dataRoomId: string, digestB64: string, webSvrPrivKey: an
         }
     };
 
-    const result = await updateDataRoom(updateDRInput);
+    const result = await updateDrive(updateDRInput);
     console.log('result', result);
 };
 
@@ -112,13 +112,13 @@ export const loader = async () => {
     );
     console.log('token', token);
 
-    // update the dataRoom with the new file
+    // update the Drive with the new file
     const udr = await updateDR(
         'KRYSQSrcpdqVZWKdwrjguSuPxsUTUCvwJAuLnWy2tX0WVHaYxQK7ywUzsaXQxNgQlHE57kkrP11aMleRcSxV4Q==',
         digest,
         webServerKey
     );
-    console.assert(udr, 'Error updating dataRoom with new file');
+    console.assert(udr, 'Error updating Drive with new file');
 
     return null;
 };

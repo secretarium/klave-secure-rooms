@@ -30,22 +30,21 @@ export type ListUserRequestsResult = {
     message?: string;
 };
 
-export type ListDataRoomsResult = {
+export type ListDrivesResult = {
     requestId: string;
     result: string[];
-    message?: string;
 };
 
-export type DataRoomContentResult = {
+export type DriveContentResult = {
     requestId: string;
     result: {
         locked: boolean;
-        files: DataRoomFile[];
+        files: DriveFile[];
     };
     message?: string;
 };
 
-export type DataRoomFile = {
+export type DriveFile = {
     digestB64: string;
     name: string;
     id: string;
@@ -61,8 +60,8 @@ export type GetFileUploadTokenResult = {
     };
 };
 
-export type DataRoomRole = {
-    dataRoomId: string;
+export type DriveRole = {
+    driveId: string;
     role: string;
 };
 
@@ -70,18 +69,18 @@ export type GetUserContentResult = {
     requestId: string;
     result: {
         id: string;
-        roles: DataRoomRole[];
+        roles: DriveRole[];
     };
     message?: string;
 };
 
 export type GetFileUploadTokenInput = {
-    dataRoomId: string;
+    driveId: string;
     digestB64: string;
 };
 
-export type UpdateDataRoomInput = {
-    dataRoomId: string;
+export type UpdateDriveInput = {
+    driveId: string;
     operation: 'addFile' | 'removeFile' | 'lock';
     file: {
         name: string;
@@ -93,7 +92,7 @@ export type UpdateDataRoomInput = {
 };
 
 export type UserRequestInput = {
-    dataRoomId: string;
+    driveId: string;
     role: string;
 };
 

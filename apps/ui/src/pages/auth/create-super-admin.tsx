@@ -41,9 +41,9 @@ export const CreateSuperAdmin = () => {
     return (
         <>
             <Helmet>
-                <title>Create Super Admin | Secure Data Rooms</title>
+                <title>Create Super Admin | Secure Drives</title>
             </Helmet>
-            <h1 className="p-4 text-2xl font-semibold">Secure Data Rooms</h1>
+            <h1 className="p-4 text-2xl font-semibold">Secure Drives</h1>
             <Form {...form}>
                 <ReactRouterForm className="max-w-80 space-y-4" method="post">
                     <FormField

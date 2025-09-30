@@ -1,10 +1,10 @@
 <a href="https://klave.com/">
-  <img alt="Klave - Secure Data Rooms" src="https://klave.com/images/marketplace/secure-data-rooms.svg">
-  <h1 align="center">Secure Data Rooms</h1>
+  <img alt="Klave - Secure Drives" src="https://klave.com/images/marketplace/secure-drives.svg">
+  <h1 align="center">Secure Drives</h1>
 </a>
 
 <p align="center">
-The secure data room app leverages on Klave's confidential computing to allow you to encrypt files and collaborate with selected users.
+The secure drive app leverages on Klave's confidential computing to allow you to encrypt files and collaborate with selected users.
 </p>
 
 ![Wasm](https://img.shields.io/badge/Webassembly-5E4EE3?style=for-the-badge&labelColor=white&logo=webassembly&logoColor=5E4EE3) ![AssemblyScript](https://img.shields.io/badge/Assemblyscript-3578C7?style=for-the-badge&labelColor=white&logo=assemblyscript&logoColor=3578C7)
@@ -13,12 +13,12 @@ The secure data room app leverages on Klave's confidential computing to allow yo
 
 This contract implements an API that provides the following functions:
 
-- Set a super admin for the secure data room
-- Super admin creates a single data room
-- Super admin approves participants upon request to become admin or viewers of the data room
-- Super admin approves the storage server upon request to become an admin of the data room
+- Set a super admin for the secure drive
+- Super admin creates a single drive
+- Super admin approves participants upon request to become admin or viewers of the drive
+- Super admin approves the storage server upon request to become an admin of the drive
 - Creation of signature / verification pair of keys for both klave and storage server
-- Ability to store file definition in klave to provide a secure access only to participants of the data room
+- Ability to store file definition in klave to provide a secure access only to participants of the drive
 
 ## Build your back-end locally
 
@@ -34,7 +34,7 @@ yarn build
 
 ## Deploy your own back-end
 
-You can deploy the back-end of the secure data room to Klave with one click:
+You can deploy the back-end of the secure drive to Klave with one click:
 [![Deploy on Klave](https://klave.com/images/deploy-on-klave.svg)](https://app.klave.com/template/github/secretarium/klave-secure-rooms)
 
 Retrieve the address of your honest application after deployment on klave website as you will target it within the UI and the storage server.
@@ -43,26 +43,26 @@ Retrieve the address of your honest application after deployment on klave websit
 
 Change the .env file in apps/ui with the following
 
-`VITE_APP_SECRETARIUM_GATEWAYS="SDR#Secure data room#wss://klave-prod.secretarium.org"`
+`VITE_APP_SECRETARIUM_GATEWAYS="SDR#Secure drive#wss://klave-prod.secretarium.org"`
 
 `VITE_APP_KLAVE_CONTRACT="address of your deployed klave contract"`
 
   
 Run `npx nx build ui` to build the application. The build artifacts are stored in the output directory (e.g. `dist/` or `build/`), ready to be deployed.
 
-Run `npx nx build ui` to deploy the UI locally.
+Run `npx nx serve ui` to deploy the UI locally.
 
 ## Build Storage server and run it locally
 
 Change the .env file in apps/uploader with the following
 
-`VITE_APP_SECRETARIUM_GATEWAYS="SDR#Secure data room#wss://klave-prod.secretarium.org"`
+`VITE_APP_SECRETARIUM_GATEWAYS="SDR#Secure drive#wss://klave-prod.secretarium.org"`
 
 `VITE_APP_KLAVE_CONTRACT="address of your deployed klave contract"`
   
 Run `npx nx build uploader` to build the application. The build artifacts are stored in the output directory (e.g. `dist/` or `build/`), ready to be deployed.
 
-Run `npx nx server uploader` to run the storage server locally.
+Run `npx nx serve uploader` to run the storage server locally.
 
 
 ## Authors
